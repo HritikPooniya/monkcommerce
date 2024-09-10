@@ -1,0 +1,11 @@
+.header{
+    height: 7vh;
+    padding: 0% 10px;
+    border-bottom: 1px solid #D1D1D1;
+}
+
+.title{
+    font-weight: 600;
+    font-size: 16px;
+   
+}

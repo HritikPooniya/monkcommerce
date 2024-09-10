@@ -1,0 +1,76 @@
+.popupArea {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sessionItem {
+  height: 80%;
+  width: 60%;
+  border-radius: 5px;
+  position: relative;
+  
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+
+}
+
+.searchContainer {
+    position: relative;
+    width: 90%
+}
+
+.searchInput {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 40px;
+}
+
+.searchIcon {
+    position: absolute;
+    top: 25%;
+    left: 1%;
+    /* right: 10px; */
+    /* transform: translateY(-50%); */
+    font-size: 18px;
+    color: #888;
+}
+
+.inptContainer{
+    border-bottom: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+}
+
+.btnCancel{
+    border-radius: 3px;
+    border: 1px solid rgb(83, 83, 83);
+    width: auto;
+    background: #FFF;
+    color: #302f2f;
+
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.btnAddd{
+    border-radius: 3px;
+    border:none;
+    width: auto;
+    background: #008060;
+    color: #FFF;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+
+
