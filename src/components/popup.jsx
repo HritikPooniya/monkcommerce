@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+
 import "../styles/Popup.css";
 
 const Popup = ({ product, onClose, setSearchTerm, addProducts,items }) => {
-  const [checkedItems, setCheckedItems] = useState({});
+ 
 
   const [arr,setArr] = useState(items);
 
