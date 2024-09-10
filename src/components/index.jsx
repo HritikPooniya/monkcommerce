@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Index = () => {
   const [product, setProduct] = useState(null);
-  const [error, setError] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [trgt, setTrgt] = useState(false);
   const [addDiscount, setAddDiscount] = useState();
