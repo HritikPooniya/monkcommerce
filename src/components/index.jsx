@@ -26,7 +26,7 @@ const Index = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get("/task/products/search", {
+        const response = await axios.get("http://stageapi.monkcommerce.app/task/products/search", {
           headers: {
             Accept: "application/json",
             "x-api-key": "72njgfa948d9aS7gs5",
