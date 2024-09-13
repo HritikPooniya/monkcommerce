@@ -26,12 +26,12 @@ const Index = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/task/products/search`, {
-          headers: {
-            Accept: "application/json",
-            "x-api-key": "72njgfa948d9aS7gs5",
-          },
-        });
+       const response = await axios.get("https://stageapi.monkcommerce.app/task/products/search", {
+  headers: {
+    Accept: "application/json",
+    "x-api-key": "72njgfa948d9aS7gs5",
+  },
+});
         setProduct(response?.data);
         // Process response data here
       } catch (error) {
