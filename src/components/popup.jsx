@@ -9,7 +9,7 @@ const Popup = ({ product, onClose, setSearchTerm, addProducts,items,itr }) => {
 
   const addProduct = (newObj, chk, index) => {
     
-     
+     console.log({chk,index});
         const updatedArr = [...arr];
         updatedArr[itr] = newObj;
         setArr(updatedArr);
