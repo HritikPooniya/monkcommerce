@@ -46,6 +46,7 @@ const Index = () => {
     e.preventDefault();
     const [dragProductId, dragVariantIndex] = e.dataTransfer.getData("text/plain").split("-");
     const dragIndex = parseInt(dragVariantIndex, 10);
+    console.log(dragProductId)
 
     setItems((prevItems) => {
       return prevItems.map((product) => {
