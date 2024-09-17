@@ -5,11 +5,11 @@ import axios from "axios";
 
 const Index = () => {
   const [product, setProduct] = useState(null);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [trgt, setTrgt] = useState(false);
   const [addDiscount, setAddDiscount] = useState();
   const [showVarants, setShowVariants] = useState();
+  const [itr,setItr] = useState(0);
 
   const [popup, setPopup] = useState(false);
   const onClose = () => {
@@ -23,15 +23,56 @@ const Index = () => {
     setPopup(false);
   };
 
+  const handleRemoveVariant = (productId, variantId) => {
+    setItems((prevItems) => {
+      return prevItems.map((product) => {
+        if (product.id === productId) {
+          return {
+            ...product,
+            variants: product.variants.filter((variant) => variant.id !== variantId)
+          };
+        }
+        return product;
+      });
+    });
+  };
+
+  // console.log({items})
+  const handleVariantDragStart = (e, productId, variantIndex) => {
+    e.dataTransfer.setData("text/plain", `${productId}-${variantIndex}`);
+  };
+
+  const handleVariantDrop = (e, productId, dropIndex) => {
+    e.preventDefault();
+    const [dragProductId, dragVariantIndex] = e.dataTransfer.getData("text/plain").split("-");
+    const dragIndex = parseInt(dragVariantIndex, 10);
+
+    setItems((prevItems) => {
+      return prevItems.map((product) => {
+        if (product.id === productId) {
+          const updatedVariants = [...product.variants];
+          const [removed] = updatedVariants.splice(dragIndex, 1);
+          updatedVariants.splice(dropIndex, 0, removed);
+          return { ...product, variants: updatedVariants };
+        }
+        return product;
+      });
+    });
+  };
+
+  const handleVariantDragOver = (e) => e.preventDefault();
+
+
   useEffect(() => {
     const fetchProduct = async () => {
+      // ${process.env.REACT_APP_API_URL}
       try {
-       const response = await axios.get("https://stageapi.monkcommerce.app/task/products/search", {
-  headers: {
-    Accept: "application/json",
-    "x-api-key": "72njgfa948d9aS7gs5",
-  },
-});
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/task/products/search`, {
+          headers: {
+            Accept: "application/json",
+            "x-api-key": "72njgfa948d9aS7gs5",
+          },
+        });
         setProduct(response?.data);
         // Process response data here
       } catch (error) {
@@ -45,7 +86,7 @@ const Index = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `/task/products/search?search=${encodeURIComponent(searchTerm)}`,
+          `${process.env.REACT_APP_API_URL}/task/products/search?search=${encodeURIComponent(searchTerm)}`,
           {
             headers: {
               Accept: "application/json",
@@ -85,8 +126,6 @@ const Index = () => {
     e.preventDefault();
   };
 
-  console.log({ items });
-
   return (
     <div className="mainContainer">
       <article className="mb-4 ms-5">Add Products</article>
@@ -122,7 +161,7 @@ const Index = () => {
                   />
                   <i
                     className="fa fa-pencil"
-                    onClick={() => setPopup(true)}
+                    onClick={() => {setItr(index);setPopup(true)}}
                     style={{
                       cursor: "pointer",
                       color: "grey",
@@ -191,7 +230,7 @@ const Index = () => {
                 ) : (
                   <div
                     onClick={() => {
-                      setShowVariants('');
+                      setShowVariants("");
                     }}
                   >
                     {" "}
@@ -205,18 +244,18 @@ const Index = () => {
                     return (
                       <>
                         <li
-                          className="d-flex gap-3 align-items-center mb-2"
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, index)}
-                          onDrop={(e) => handleDrop(e, index)}
-                          onDragOver={handleDragOver}
+                          className="d-flex gap-3 align-items-center mb-2 "
+                        draggable
+                      onDragStart={(e) => handleVariantDragStart(e, item.id, itr)}
+                      onDrop={(e) => handleVariantDrop(e, item.id, itr)}
+                      onDragOver={handleVariantDragOver}
                         >
                           <img src="/assets/threedots.svg" alt="Drag Handle" />
                           <div style={{ fontWeight: "400", fontSize: "14px" }}>
                             {itr + 1}.
                           </div>
                           <div
-                            className="input justify-content-between px-3"
+                            className="input justify-content-between px-3 w-75"
                             style={{ border: "none", borderRadius: "24px" }}
                           >
                             <input
@@ -226,45 +265,12 @@ const Index = () => {
                               value={val?.title}
                             />
                           </div>
-                          {addDiscount !== val.id && (
-                            <button
-                              className="btn"
-                              onClick={() => setAddDiscount(val.id)}
-                            >
-                              Add Discount
-                            </button>
-                          )}
-                          {addDiscount === val.id && (
-                            <>
-                              <input
-                                type="number"
-                                style={{
-                                  width: "100px",
-                                  fontSize: "16px",
-                                  padding: "4px",
-                                }}
-                                placeholder="0"
-                              ></input>
-                              <select
-                                name=""
-                                id=""
-                                style={{
-                                  width: "100px",
-                                  fontSize: "16px",
-                                  padding: "4px",
-                                }}
-                              >
-                                <option value="% off">% off</option>
-                                <option value="Flat">Flat off</option>
-                              </select>
-                              <div
-                                onClick={() => setAddDiscount("")}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <i className="fa fa-close" />
-                              </div>
-                            </>
-                          )}
+                          <div
+                            style={{ cursor: "pointer" }}
+                            onClick={() => handleRemoveVariant(item.id, val.id)} 
+                          >
+                            x
+                          </div>
                         </li>
                       </>
                     );
@@ -315,7 +321,7 @@ const Index = () => {
       </ol>
 
       <div className="text-end mt-4">
-        <button className="btnAdd" onClick={() => setPopup(true)}>
+        <button className="btnAdd" onClick={() => {setItr(items.length);setPopup(true)}}>
           Add Product
         </button>
       </div>
@@ -326,6 +332,7 @@ const Index = () => {
           setSearchTerm={setSearchTerm}
           addProducts={addProducts}
           items={items}
+          itr={itr}
         />
       )}
     </div>
