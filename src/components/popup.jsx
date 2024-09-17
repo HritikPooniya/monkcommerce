@@ -2,29 +2,23 @@ import React, { useState } from "react";
 
 import "../styles/Popup.css";
 
-const Popup = ({ product, onClose, setSearchTerm, addProducts,items }) => {
- 
+const Popup = ({ product, onClose, setSearchTerm, addProducts,items,itr }) => {
+
 
   const [arr,setArr] = useState(items);
 
-  const addProduct = (newObj,chk)=>{
-    console.log({chk})
-    if(chk){
-        if(arr.includes(newObj)){
-            return ;
-        }
-        setArr(arr.concat(newObj))
+  const addProduct = (newObj, chk, index) => {
+    
+     
+        const updatedArr = [...arr];
+        updatedArr[itr] = newObj;
+        setArr(updatedArr);
 
-    }else{
-        if(arr.includes(newObj)){
-            setArr(arr.filter(item => item !== newObj))
-            return ;
-        }
-        setArr(arr.filter(item => item === newObj))
-    }
-  }
+    
+  };
+  
 
-  console.log({arr})
+
 
 
 
@@ -71,7 +65,7 @@ const Popup = ({ product, onClose, setSearchTerm, addProducts,items }) => {
                       type="checkbox"
                       checked={arr.includes(item)}
                       onChange={(e) =>
-                        addProduct(item, e.target.checked)
+                        addProduct(item, e.target.checked,index)
                       }
                     />
                     <img
